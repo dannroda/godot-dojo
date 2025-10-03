@@ -389,11 +389,6 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Add target for macOS builds
-        run: |
-          rustup target add x86_64-apple-darwin
-          rustup target add aarch64-apple-darwin
-
       - name: Cache Rust dependencies
         uses: actions/cache@v3
         with:
@@ -478,11 +473,6 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Add target for macOS builds
-        run: |
-          rustup target add x86_64-apple-darwin
-          rustup target add aarch64-apple-darwin
-
       - name: Cache Rust dependencies
         uses: actions/cache@v3
         with:
@@ -566,11 +556,6 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-
-      - name: Add target for macOS builds
-        run: |
-          rustup target add x86_64-apple-darwin
-          rustup target add aarch64-apple-darwin
 
       - name: Cache Rust dependencies
         uses: actions/cache@v3
