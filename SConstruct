@@ -127,23 +127,26 @@ elif platform == "macos" and arch == "arm64":
 
 # Ensure the Rust target is installed
 try:
-    print(f"{Y}Checking if Rust target {rust_target} is installed...{X}")
+    targets_to_check = rust_target if isinstance(rust_target, list) else [rust_target]
+    print(f"{Y}Checking if Rust targets {targets_to_check} are installed...{X}")
     result = subprocess.run(["rustup", "target", "list", "--installed"], capture_output=True, text=True, check=True)
     installed_targets = result.stdout.splitlines()
 
-    if rust_target not in installed_targets:
-        print(f"{Y}Installing Rust target {rust_target}...{X}")
-        # Run rustup target add in the main directory
-        subprocess.run(["rustup", "target", "add", rust_target], check=True)
-        # Also run rustup target add in the external/dojo.c directory
-        print(f"{Y}Installing Rust target {rust_target} in external/dojo.c directory...{X}")
-        subprocess.run(["rustup", "target", "add", rust_target], check=True, cwd="external/dojo.c")
-        print(f"{G}{check} Rust target {rust_target} installed{X}")
-    else:
-        print(f"{G}{check} Rust target {rust_target} is already installed{X}")
-        # Even if the target is already installed globally, ensure it's also installed in the external/dojo.c directory
-        print(f"{Y}Ensuring Rust target {rust_target} is installed in external/dojo.c directory...{X}")
-        subprocess.run(["rustup", "target", "add", rust_target], check=False, cwd="external/dojo.c")
+    all_installed = True
+    for rt in targets_to_check:
+        if rt not in installed_targets:
+            all_installed = False
+            print(f"{Y}Installing Rust target {rt}...{X}")
+            subprocess.run(["rustup", "target", "add", rt], check=True)
+            print(f"{G}{check} Rust target {rt} installed{X}")
+
+    if all_installed:
+        print(f"{G}{check} All required Rust targets are already installed.{X}")
+
+    # Ensure targets are also available in the submodule directory context
+    for rt in targets_to_check:
+        subprocess.run(["rustup", "target", "add", rt], check=False, cwd="external/dojo.c")
+
 except subprocess.CalledProcessError as e:
     print(f"{R}{cross} Failed to check or install Rust target: {e}{X}")
     # Continue anyway, as cargo will show a more specific error if needed
