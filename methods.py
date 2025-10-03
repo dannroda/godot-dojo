@@ -102,6 +102,36 @@ def apply_dojo_h_patch(Exit):
         Exit(1)
 
 
+def ensure_rust_targets_are_installed(targets: list[str], env_vars: dict) -> None:
+    """
+    Checks if the required Rust targets are installed and installs them if not.
+    Handles cases where `rustup` might not be in the default PATH.
+    """
+    try:
+        # Check which targets are already installed
+        result = subprocess.run(["rustup", "target", "list", "--installed"], capture_output=True, text=True, check=True, env=env_vars)
+        installed_targets = set(result.stdout.splitlines())
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        # If rustup is not found, it might be because ~/.cargo/bin (or %USERPROFILE%/.cargo/bin on Windows)
+        # is not in the PATH for subprocesses. This is a common issue on fresh installs.
+        cargo_home = os.path.expanduser("~/.cargo/bin")
+        if cargo_home not in env_vars.get("PATH", ""):
+            print(f"{ANSI.YELLOW}Adding '{cargo_home}' to PATH to find rustup...{ANSI.RESET}")
+            env_vars["PATH"] = f"{cargo_home}{os.pathsep}{env_vars.get('PATH', '')}"
+        try:
+            result = subprocess.run(["rustup", "target", "list", "--installed"], capture_output=True, text=True, check=True, env=env_vars)
+            installed_targets = set(result.stdout.splitlines())
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            print_error(f"Failed to run 'rustup'. Is Rust installed and in your PATH? Error: {e}")
+            sys.exit(1)
+
+    for target in targets:
+        if target not in installed_targets:
+            print(f"{ANSI.YELLOW}Rust target '{target}' not found. Installing...{ANSI.RESET}")
+            subprocess.run(["rustup", "target", "add", target], check=True, env=env_vars)
+            print(f"{ANSI.GREEN}{check} Rust target '{target}' installed successfully.{ANSI.RESET}")
+
+
 def detect_godot_min_requirement():
     repo_path = os.path.join(os.getcwd(), "external", "godot-cpp")
     version_source = None

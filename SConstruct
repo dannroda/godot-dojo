@@ -74,7 +74,8 @@ from methods import (
     party,
     apply_dojo_h_patch,
     detect_godot_min_requirement,
-    copy_web_artifacts
+    copy_web_artifacts,
+    ensure_rust_targets_are_installed
 )
 
 AddOption("--merge-ios-xcframeworks", dest="merge_ios_xcframeworks", action="store_true", default=False, help="Merge iOS device and simulator XCFrameworks")
@@ -294,23 +295,11 @@ else:
         env_vars["RUSTFLAGS"] = f"{rustflags} -C link-arg=-mmacosx-version-min=14.0".lstrip()
 
     libs_to_lipo = []
+    # Ensure all required Rust targets are installed before starting the build loop.
+    ensure_rust_targets_are_installed(rust_targets_to_build, env_vars)
     try:
         for current_rust_target in rust_targets_to_build:
             print(f"{ANSI.YELLOW}Building for Rust target: {current_rust_target}...{ANSI.RESET}")
-            
-            # Ensure Rust target is installed
-            try:
-                result = subprocess.run(["rustup", "target", "list", "--installed"], capture_output=True, text=True, check=True)
-                if current_rust_target not in result.stdout:
-                    # On some systems (like fresh macOS installs), rustup might not be in the default PATH
-                    # for subprocesses, even if it's in the shell's PATH. We can add the cargo bin dir to the PATH.
-                    cargo_home = os.path.expanduser("~/.cargo/bin")
-                    env_vars["PATH"] = f"{cargo_home}{os.pathsep}{env_vars['PATH']}"
-                    print(f"{ANSI.YELLOW}Installing Rust target {current_rust_target}...{ANSI.RESET}")
-                    subprocess.run(["rustup", "target", "add", current_rust_target], check=True)
-                    subprocess.run(["rustup", "target", "add", current_rust_target], check=True, cwd="external/dojo.c")
-            except subprocess.CalledProcessError as e:
-                print(f"{ANSI.RED}{cross} Failed to check or install Rust target: {e}{ANSI.RESET}")
 
             cmd = cargo_cmd_base + ["--target", current_rust_target]
 
@@ -378,7 +367,6 @@ if platform == "windows":
         rust_lib = f"{rust_lib_dir}/libdojo_c.a"
     else:
         rust_lib = f"{rust_lib_dir}/dojo_c.lib"
-        env.Append(LINKFLAGS=['/NODEFAULTLIB:MSVCRT'])
     env.Append(LIBS=[File(rust_lib)])
     env.Append(LIBS=['ws2_32', 'advapi32', 'ntdll'])
 elif platform == "linux":
