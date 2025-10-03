@@ -89,7 +89,7 @@ if GetOption('merge_ios_xcframeworks'):
         Exit(1)
 
     print(f"{ANSI.YELLOW}{package} Merging iOS XCFrameworks...{ANSI.RESET}")
-    
+
     target_merge = env_merge.get("target", "template_debug")
     build_mode_merge = "release" if target_merge == "template_release" else "debug"
 
@@ -124,11 +124,11 @@ if GetOption('merge_ios_xcframeworks'):
 
     os.makedirs(os.path.dirname(output_fw_path), exist_ok=True)
 
-    cmd = ["xcodebuild", "-create-xcframework", 
+    cmd = ["xcodebuild", "-create-xcframework",
            "-library", device_lib_path,
            "-library", sim_lib_path,
            "-output", output_fw_path]
-    
+
     try:
         subprocess.run(cmd, check=True, capture_output=True, text=True)
         print(f"{ANSI.GREEN}{check} Universal XCFramework created successfully at {output_fw_path}.{ANSI.RESET}")
@@ -297,7 +297,7 @@ else:
     try:
         for current_rust_target in rust_targets_to_build:
             print(f"{ANSI.YELLOW}Building for Rust target: {current_rust_target}...{ANSI.RESET}")
-            
+
             # Ensure Rust target is installed
             try:
                 result = subprocess.run(["rustup", "target", "list", "--installed"], capture_output=True, text=True, check=True)
@@ -319,7 +319,7 @@ else:
                 env_vars[f"CARGO_TARGET_{current_rust_target.upper().replace('-', '_')}_LINKER"] = compiler_path
 
             subprocess.run(cmd, check=True, cwd="external/dojo.c", env=env_vars)
-            
+
             if (platform == "macos" or platform == "ios") and arch == "universal":
                 libs_to_lipo.append(f"external/dojo.c/target/{current_rust_target}/{build_mode}/libdojo_c.a")
     finally:
@@ -332,7 +332,7 @@ else:
         universal_dir = f"external/dojo.c/target/{rust_target_folder_name}/{build_mode}"
         os.makedirs(universal_dir, exist_ok=True)
         universal_lib_path = f"{universal_dir}/libdojo_c.a"
-        
+
         lipo_cmd = ["lipo", "-create"] + libs_to_lipo + ["-output", universal_lib_path]
         subprocess.run(lipo_cmd, check=True)
         print(f"{ANSI.GREEN}{check} Universal library created at {universal_lib_path}{ANSI.RESET}")
@@ -374,13 +374,17 @@ rust_lib_dir = f"external/dojo.c/target/{rust_target_folder_name}/{build_mode}"
 rust_lib = ""
 
 if platform == "windows":
+
     if use_mingw:
         rust_lib = f"{rust_lib_dir}/libdojo_c.a"
-    else:
+    elif is_host_windows:
         rust_lib = f"{rust_lib_dir}/dojo_c.lib"
         env.Append(LINKFLAGS=['/NODEFAULTLIB:MSVCRT'])
+    else:
+        rust_lib = ""  # Should not happen
     env.Append(LIBS=[File(rust_lib)])
     env.Append(LIBS=['ws2_32', 'advapi32', 'ntdll'])
+
 elif platform == "linux":
     rust_lib = f"{rust_lib_dir}/libdojo_c.a"
     env.Append(LIBS=[File(rust_lib)])
