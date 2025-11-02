@@ -200,9 +200,12 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
+          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
+
+      - name: Show file tree
+        run: ls -R
 
       - name: Build godot-dojo-core
         shell: bash
@@ -265,7 +268,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
+          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
 
@@ -282,6 +285,9 @@ jobs:
 
       - name: Install scons
         run: pip install scons
+
+      - name: Show file tree
+        run: ls -R
 
       - name: Build GDExtension
         shell: bash
@@ -357,7 +363,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
+          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
 
@@ -374,6 +380,9 @@ jobs:
 
       - name: Install scons
         run: pip install scons
+
+      - name: Show file tree
+        run: ls -R
 
       - name: Build GDExtension
         shell: bash
@@ -446,7 +455,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
+          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
 
@@ -463,6 +472,9 @@ jobs:
 
       - name: Install scons
         run: pip install scons
+
+      - name: Show file tree
+        run: ls -R
 
       - name: Build GDExtension
         shell: bash
@@ -548,7 +560,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
+          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
 
@@ -570,6 +582,10 @@ jobs:
       - name: Install uniffi-bindgen-cpp from source
         if: steps.check_failure.outcome == 'success' && steps.cache-uniffi-bindgen-cpp.outputs.cache-hit != 'true'
         run: cargo install --git https://github.com/Larkooo/uniffi-bindgen-cpp --branch update-0.30 uniffi-bindgen-cpp
+
+      - name: Show file tree
+        if: steps.check_failure.outcome == 'success'
+        run: ls -R
 
       - name: Build GDExtension
         if: steps.check_failure.outcome == 'success'
