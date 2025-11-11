@@ -124,7 +124,7 @@ jobs:
           PRECISION_ARG="precision=${{ inputs.precision }}"
           export FORCE_RUST_RELEASE=1
 
-          if [ "${{ runner.os }}" = "macOS" ]; then
+          if [ "${{ runner.os }}" = "macOS" ] && [ -n "${{ inputs.macos_deployment_target }}" ]; then
             export MACOSX_DEPLOYMENT_TARGET=${{ inputs.macos_deployment_target }}
             export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }-C link-arg=-mmacosx-version-min=${{ inputs.macos_deployment_target }}"
           fi

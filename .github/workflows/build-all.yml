@@ -238,7 +238,7 @@ jobs:
         env:
           SKIP_BINDINGS_GENERATION: 1
         run: |
-          if [ "${{ runner.os }}" = "macOS" ]; then
+          if [ "${{ runner.os }}" = "macOS" ] && [ -n "${{ matrix.macos_deployment_target }}" ]; then
             export MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_deployment_target }}
             export RUSTFLAGS="${RUSTFLAGS}-C link-arg=-mmacosx-version-min=${{ matrix.macos_deployment_target }}"
           fi
