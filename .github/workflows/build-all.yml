@@ -176,6 +176,12 @@ jobs:
             arch: arm64
             rust_target: aarch64-linux-android
             macos_deployment_target: ""
+          - platform_id: ios
+            os_image: macos-latest
+            arch: universal
+            rust_target: 'aarch64-apple-ios' # Base target, SConstruct handles the rest
+            macos_deployment_target: ""
+
 
     steps:
       - name: Checkout code
