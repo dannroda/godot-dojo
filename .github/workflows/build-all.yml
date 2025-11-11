@@ -215,7 +215,7 @@ jobs:
           echo "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang" >> $GITHUB_ENV
           echo "CC_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang" >> $GITHUB_ENV
           echo "CXX_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++" >> $GITHUB_ENV
-          echo "AR_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar" >> $GITHUB_ENV
+          echo "AR_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
 
       - name: Set up Rust nightly
         uses: dtolnay/rust-toolchain@nightly
@@ -240,15 +240,29 @@ jobs:
         run: |
           if [ "${{ runner.os }}" = "macOS" ]; then
             export MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_deployment_target }}
-            export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }-C link-arg=-mmacosx-version-min=${{ matrix.macos_deployment_target }}"
+            export RUSTFLAGS="${RUSTFLAGS}-C link-arg=-mmacosx-version-min=${{ matrix.macos_deployment_target }}"
           fi
 
-          cargo build --release --target ${{ matrix.rust_target }}
+          if [ "${{ matrix.platform_id }}" = "ios" ]; then
+            cargo build --release --target aarch64-apple-ios
+            cargo build --release --target x86_64-apple-ios
+          else
+            cargo build --release --target ${{ matrix.rust_target }}
+          fi
 
       - name: Upload core artifacts (target)
+        if: matrix.platform_id != 'ios'
         uses: actions/upload-artifact@v4
         with:
           name: core-target-${{ matrix.platform_id }}-${{ matrix.arch }}-release
+          path: godot-dojo-core/target
+          if-no-files-found: error
+
+      - name: Upload core artifacts (iOS)
+        if: matrix.platform_id == 'ios'
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-target-ios-universal-release
           path: godot-dojo-core/target
           if-no-files-found: error
 
