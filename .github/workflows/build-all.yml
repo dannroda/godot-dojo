@@ -309,203 +309,65 @@ jobs:
       platform_id: ios
       macos_deployment_target: ''
 
-  # To keep the file smaller, I've removed the other build-gdextension-* jobs.
-  # They should be converted to use the reusable workflow as well, like this:
-  #
-  # build-gdextension-linux:
-  #   name: Build GDExtension (linux-${{ matrix.arch }}-${{ matrix.precision }}-${{ matrix.build_target }})
-  #   needs: [create_release, build-rust-core]
-  #   if: needs.create_release.result == 'success' && needs.build-rust-core.result == 'success'
-  #   uses: ./.github/workflows/reusable-build.yml
-  #   with:
-  #     ... (parameters for linux)
-
-
   build-gdextension-linux:
     name: Build GDExtension (linux-${{ matrix.arch }}-${{ matrix.precision }}-${{ matrix.build_target }})
     needs: [create_release, build-rust-core]
     if: needs.create_release.result == 'success' && needs.build-rust-core.result == 'success'
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/reusable-build.yml
     strategy:
       fail-fast: false
       matrix:
         precision: [single, double]
         build_target: [editor, templates]
         include:
+          - os: ubuntu-latest
           - arch: x86_64
             rust_target: x86_64-unknown-linux-gnu
             platform_id: linux
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config dbus libdbus-1-dev protobuf-compiler libprotobuf-dev
-
-      - name: Download core artifacts (target)
-        uses: actions/download-artifact@v4
-        with:
-          name: core-target-${{ matrix.platform_id }}-${{ matrix.arch }}-release
-          path: godot-dojo-core/target
-
-      - name: Set up Rust nightly
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          targets: ${{ matrix.rust_target }}
-
-      - name: Cache Rust dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
-          restore-keys: |
-            ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
-
-      - name: Cache uniffi-bindgen-cpp
-        id: cache-uniffi-bindgen-cpp
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/bin/uniffi-bindgen-cpp
-          key: ${{ runner.os }}-uniffi-bindgen-cpp-Larkooo-0.30
-
-      - name: Install uniffi-bindgen-cpp from source
-        if: steps.cache-uniffi-bindgen-cpp.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/Larkooo/uniffi-bindgen-cpp --branch update-0.30 uniffi-bindgen-cpp
-
-      - name: Install scons
-        run: pip install scons
-
-      - name: Build GDExtension
-        shell: bash
-        run: |
-          set -e
-          PLATFORM_ARG="platform=${{ matrix.platform_id }}"
-          ARCH_ARG="arch=${{ matrix.arch }}"
-          PRECISION_ARG="precision=${{ matrix.precision }}"
-          export CARGO_BUILD_TARGET=${{ matrix.rust_target }}
-          export FORCE_RUST_RELEASE=1
-
-          mkdir -p demo/addons/godot-dojo
-
-          if [ "${{ matrix.build_target }}" = "templates" ]; then
-            scons $PLATFORM_ARG $ARCH_ARG target=template_debug $PRECISION_ARG -j2
-            scons $PLATFORM_ARG $ARCH_ARG target=template_release $PRECISION_ARG -j2
-          else
-            scons $PLATFORM_ARG $ARCH_ARG target=${{ matrix.build_target }} $PRECISION_ARG -j2
-          fi
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: bin-${{ matrix.precision }}-${{ matrix.platform_id }}-${{ matrix.arch }}-${{ matrix.build_target }}
-          path: demo/addons/godot-dojo/
-          if-no-files-found: error
+    with:
+      os: ${{ matrix.os }}
+      arch: ${{ matrix.arch }}
+      rust_target: ${{ matrix.rust_target }}
+      precision: ${{ matrix.precision }}
+      build_target: ${{ matrix.build_target }}
+      platform_id: ${{ matrix.platform_id }}
+      macos_deployment_target: ''
 
   build-gdextension-macos:
     name: Build GDExtension (macos-${{ matrix.arch }}-${{ matrix.precision }}-${{ matrix.build_target }})
     needs: [create_release, build-rust-core]
     if: needs.create_release.result == 'success' && needs.build-rust-core.result == 'success'
-    runs-on: ${{ matrix.os }}
+    uses: ./.github/workflows/reusable-build.yml
     strategy:
       fail-fast: false
       matrix:
         precision: [single, double]
         build_target: [editor, templates]
         include:
-          - os: macos-latest
-            arch: arm64
-            rust_target: aarch64-apple-darwin
-            macos_deployment_target: "14.0"
-            platform_id: macos
-          - os: macos-latest
-            arch: x86_64
-            rust_target: x86_64-apple-darwin
-            macos_deployment_target: "14.0"
-            platform_id: macos
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-
-      - name: Install dependencies
-        run: brew install protobuf
-
-      - name: Download core artifacts (target)
-        uses: actions/download-artifact@v4
-        with:
-          name: core-target-${{ matrix.platform_id }}-${{ matrix.arch }}-release
-          path: godot-dojo-core/target
-
-      - name: Set up Rust nightly
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          targets: ${{ matrix.rust_target }}
-
-      - name: Cache Rust dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
-          restore-keys: |
-            ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
-
-      - name: Cache uniffi-bindgen-cpp
-        id: cache-uniffi-bindgen-cpp
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/bin/uniffi-bindgen-cpp
-          key: ${{ runner.os }}-uniffi-bindgen-cpp-Larkooo-0.30
-
-      - name: Install uniffi-bindgen-cpp from source
-        if: steps.cache-uniffi-bindgen-cpp.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/Larkooo/uniffi-bindgen-cpp --branch update-0.30 uniffi-bindgen-cpp
-
-      - name: Install scons
-        run: pip install scons
-
-      - name: Build GDExtension
-        shell: bash
-        run: |
-          set -e
-          PLATFORM_ARG="platform=${{ matrix.platform_id }}"
-          ARCH_ARG="arch=${{ matrix.arch }}"
-          PRECISION_ARG="precision=${{ matrix.precision }}"
-          export CARGO_BUILD_TARGET=${{ matrix.rust_target }}
-          export FORCE_RUST_RELEASE=1
-
-          export MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_deployment_target }}
-          export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }-C link-arg=-mmacosx-version-min=${{ matrix.macos_deployment_target }}"
-
-          mkdir -p demo/addons/godot-dojo
-
-          if [ "${{ matrix.build_target }}" = "templates" ]; then
-            scons $PLATFORM_ARG $ARCH_ARG target=template_debug $PRECISION_ARG -j2
-            scons $PLATFORM_ARG $ARCH_ARG target=template_release $PRECISION_ARG -j2
-          else
-            scons $PLATFORM_ARG $ARCH_ARG target=${{ matrix.build_target }} $PRECISION_ARG -j2
-          fi
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: bin-${{ matrix.precision }}-${{ matrix.platform_id }}-${{ matrix.arch }}-${{ matrix.build_target }}
-          path: demo/addons/godot-dojo/
-          if-no-files-found: error
+           - os: macos-latest
+             arch: arm64
+             rust_target: aarch64-apple-darwin
+             macos_deployment_target: "14.0"
+             platform_id: macos
+           - os: macos-latest
+             arch: x86_64
+             rust_target: x86_64-apple-darwin
+             macos_deployment_target: "14.0"
+             platform_id: macos
+    with:
+      os: ${{ matrix.os }}
+      arch: ${{ matrix.arch }}
+      rust_target: ${{ matrix.rust_target }}
+      precision: ${{ matrix.precision }}
+      build_target: ${{ matrix.build_target }}
+      platform_id: ${{ matrix.platform_id }}
+      macos_deployment_target: ${{ matrix.macos_deployment_target }}
 
   build-gdextension-windows:
     name: Build GDExtension (windows-${{ matrix.arch }}-${{ matrix.precision }}-${{ matrix.build_target }})
     needs: [create_release, build-rust-core]
     if: needs.create_release.result == 'success' && needs.build-rust-core.result == 'success'
-    runs-on: windows-latest
+    uses: ./.github/workflows/reusable-build.yml
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -513,92 +375,18 @@ jobs:
         precision: [single, double]
         build_target: [editor, templates]
         include:
+          - os: windows-latest
           - platform_id: windows
             arch: x86_64
             rust_target: x86_64-pc-windows-msvc
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-
-      - name: Install dependencies (Windows)
-        run: choco install protoc
-
-      - name: Download core artifacts (target)
-        uses: actions/download-artifact@v4
-        with:
-          name: core-target-${{ matrix.platform_id }}-${{ matrix.arch }}-release
-          path: godot-dojo-core/target
-
-      - name: Set up Rust nightly
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          targets: ${{ matrix.rust_target }}
-
-      - name: Cache Rust dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-${{ hashFiles('godot-dojo-core/Cargo.lock') }}
-          restore-keys: |
-            ${{ matrix.platform_id }}-${{ matrix.arch }}-cargo-deps-
-
-      - name: Cache uniffi-bindgen-cpp
-        id: cache-uniffi-bindgen-cpp
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/bin/uniffi-bindgen-cpp
-          key: ${{ runner.os }}-uniffi-bindgen-cpp-Larkooo-0.30
-
-      - name: Install uniffi-bindgen-cpp from source
-        if: steps.cache-uniffi-bindgen-cpp.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/Larkooo/uniffi-bindgen-cpp --branch update-0.30 uniffi-bindgen-cpp
-
-      - name: Install scons
-        run: pip install scons
-
-      - name: Build GDExtension
-        shell: bash
-        run: |
-          set -e
-          PLATFORM_ARG="platform=windows"
-          ARCH_ARG="arch=${{ matrix.arch }}"
-          PRECISION_ARG="precision=${{ matrix.precision }}"
-          export CARGO_BUILD_TARGET=${{ matrix.rust_target }}
-          export FORCE_RUST_RELEASE=1
-
-          mkdir -p demo/addons/godot-dojo
-
-          if [ "${{ matrix.build_target }}" = "templates" ]; then
-            scons $PLATFORM_ARG $ARCH_ARG target=template_debug $PRECISION_ARG -j2
-            scons $PLATFORM_ARG $ARCH_ARG target=template_release $PRECISION_ARG -j2
-          else
-            scons $PLATFORM_ARG $ARCH_ARG target=${{ matrix.build_target }} $PRECISION_ARG -j2
-          fi
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: bin-${{ matrix.precision }}-windows-${{ matrix.arch }}-${{ matrix.build_target }}
-          path: |
-            demo/addons/godot-dojo/
-            ${{ format('godot-dojo-core/target/{0}/release/dojo_c.dll', matrix.rust_target) }}
-          if-no-files-found: error
-
-      - name: Create failure marker
-        if: failure()
-        run: echo "Windows MSVC build failed" > windows-build-failure.txt
-
-      - name: Upload failure marker
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build-failed
-          path: windows-build-failure.txt
+    with:
+      os: ${{ matrix.os }}
+      arch: ${{ matrix.arch }}
+      rust_target: ${{ matrix.rust_target }}
+      precision: ${{ matrix.precision }}
+      build_target: ${{ matrix.build_target }}
+      platform_id: ${{ matrix.platform_id }}
+      macos_deployment_target: ''
 
   build-gdextension-windows-fallback:
     name: Build GDExtension Windows Fallback (GNU)
@@ -615,11 +403,23 @@ jobs:
             arch: x86_64
             rust_target: x86_64-pc-windows-gnu
     steps:
+      - name: Create failure marker
+        if: needs.build-gdextension-windows.result == 'failure'
+        run: echo "Windows MSVC build failed" > windows-build-failure.txt
+
+      - name: Upload failure marker
+        if: needs.build-gdextension-windows.result == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build-failed
+          path: windows-build-failure.txt
+
       - name: Check for MSVC build failure
         id: check_failure
         uses: actions/download-artifact@v4
         with:
           name: windows-build-failed
+        # This step will succeed only if the artifact from the failed MSVC job was uploaded.
         continue-on-error: true
 
       - name: Checkout code
@@ -667,6 +467,21 @@ jobs:
       - name: Install uniffi-bindgen-cpp from source
         if: steps.check_failure.outcome == 'success' && steps.cache-uniffi-bindgen-cpp.outputs.cache-hit != 'true'
         run: cargo install --git https://github.com/Larkooo/uniffi-bindgen-cpp --branch update-0.30 uniffi-bindgen-cpp
+
+      - name: Cache SCons and godot-cpp build artifacts
+        if: steps.check_failure.outcome == 'success'
+        uses: actions/cache@v3
+        with:
+          path: |
+            .sconsign.dblite
+            demo/addons/godot-dojo/
+            external/godot-cpp/bin/
+            external/godot-cpp/.sconsign.dblite
+            external/godot-cpp/gen/
+            external/godot-cpp/__pycache__/
+          key: ${{ runner.os }}-${{ matrix.arch }}-scons-${{ matrix.precision }}-${{ matrix.build_target }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.h', 'bindings/**/*.cpp', 'bindings/**/*.h', 'SConstruct', 'godot-dojo-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.arch }}-scons-${{ matrix.precision }}-${{ matrix.build_target }}-
 
       - name: Build GDExtension
         if: steps.check_failure.outcome == 'success'
