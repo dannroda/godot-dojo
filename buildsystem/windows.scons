@@ -1,0 +1,51 @@
+import os
+import platform as host_platform
+
+Import("env")
+
+is_host_windows = host_platform.system().lower() == "windows"
+use_mingw = env.get("use_mingw", False)
+
+def get_rust_target(arch, env_):
+    return "x86_64-pc-windows-gnu" if (not is_host_windows or use_mingw) else "x86_64-pc-windows-msvc"
+
+def configure_compiler(env_):
+    if not use_mingw:
+        # MSVC
+        env_.Append(CXXFLAGS=['/EHsc', '/std:c++17'])
+    else:
+        # MinGW
+        env_.Append(CXXFLAGS=['-fexceptions', '-std=c++17'])
+
+def get_rust_lib_path(rust_lib_target_dir, rust_build_mode):
+    base_path = f"godot-dojo-core/target/{rust_lib_target_dir}/{rust_build_mode}"
+    return f"{base_path}/libgodot_dojo_core.a" if use_mingw else f"{base_path}/godot_dojo_core.lib"
+
+def configure_linking(env_, rust_lib_path):
+    if use_mingw:
+        win_libs = ['-lws2_32', '-ladvapi32', '-lntdll']
+        env_.Append(_LIBFLAGS=['-Wl,--start-group', rust_lib_path] + win_libs + ['-Wl,--end-group'])
+    else: # MSVC
+        env_.Append(LINKFLAGS=[f"/WHOLEARCHIVE:{os.path.basename(rust_lib_path)}", '/NODEFAULTLIB:MSVCRT'])
+        env_.Append(LIBPATH=[os.path.dirname(rust_lib_path)])
+        env_.Append(LIBS=['ws2_32', 'advapi32', 'ntdll'])
+
+def get_output_paths(env_, prefix, target, arch):
+    target_out_dir = target if target == "editor" else target.split('_', 1)[1]
+    output_dir = f"demo/addons/godot-dojo/bin/windows/{target_out_dir}"
+    suffix = f".windows.{target}.{arch}.dll"
+    lib_name = f"{output_dir}/{prefix}godot-dojo{suffix}"
+    return output_dir, lib_name
+
+def post_build_logic(env_, command_line_targets, target, arch):
+    pass # No post-build logic for Windows
+
+config = {
+    "get_rust_target": get_rust_target,
+    "configure_compiler": configure_compiler,
+    "get_rust_lib_path": get_rust_lib_path,
+    "configure_linking": configure_linking,
+    "get_output_paths": get_output_paths,
+    "post_build_logic": post_build_logic,
+}
+Return("config")

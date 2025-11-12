@@ -1,0 +1,115 @@
+import os
+import subprocess
+import shutil
+Import("env")
+
+G, R, Y, X = '\033[92m', '\033[91m', '\033[1;33m', '\033[0m'
+broom, check, package, cross = "🧹", "✅", "📦", "❌"
+
+def get_rust_target(arch, env_):
+    is_sim = env_.get('ios_simulator', False)
+    targets = {
+        "arm64": "aarch64-apple-ios-sim" if is_sim else "aarch64-apple-ios",
+        "x86_64": "x86_64-apple-ios", # Simulator only
+        "universal": ["aarch64-apple-ios", "x86_64-apple-ios", "aarch64-apple-ios-sim"],
+    }
+    return targets.get(arch)
+
+def configure_compiler(env_):
+    env_.Append(CXXFLAGS=['-fexceptions', '-std=c++17'])
+
+def get_rust_lib_path(rust_lib_target_dir, rust_build_mode):
+    return f"godot-dojo-core/target/{rust_lib_target_dir}/{rust_build_mode}/libgodot_dojo_core.a"
+
+def configure_linking(env_, rust_lib_path):
+    env_.Append(_LIBFLAGS=[rust_lib_path])
+    env_.Append(LINKFLAGS=['-framework', 'CoreFoundation'])
+
+def get_output_paths(env_, prefix, target, arch):
+    target_out_dir = target if target == "editor" else target.split('_', 1)[1]
+    output_dir = f"build/ios/{target_out_dir}"
+    is_sim = env_.get('ios_simulator', False)
+    sim_suffix = ".simulator" if is_sim else ""
+    suffix = f".ios.{target}{sim_suffix}.{arch}.dylib"
+    lib_name = f"{output_dir}/{prefix}godot-dojo{suffix}"
+    return output_dir, lib_name
+
+def _create_xcframework_action(target, source, env_):
+    xcframework_path = str(target[0])
+    source_paths = [str(s) for s in source if os.path.exists(str(s))]
+    if not source_paths:
+        print(f"{R}{cross} No libraries found to create XCFramework. Aborting.{X}")
+        return 1
+
+    device_libs = [p for p in source_paths if "simulator" not in p]
+    simulator_libs = [p for p in source_paths if "simulator" in p]
+    final_libs = device_libs
+
+    if len(simulator_libs) > 1:
+        print(f"{Y}Merging simulator libraries with lipo...{X}")
+        output_dir = os.path.dirname(simulator_libs[0])
+        universal_sim_lib_path = os.path.join(output_dir, "godot-dojo.ios.universal.simulator.dylib")
+        lipo_inputs = [lib for lib in simulator_libs if "universal" not in os.path.basename(lib)]
+        if os.path.exists(universal_sim_lib_path): os.remove(universal_sim_lib_path)
+        subprocess.run(["lipo", "-create", "-output", universal_sim_lib_path] + lipo_inputs, check=True)
+        final_libs.append(universal_sim_lib_path)
+        print(f"{G}{check} Universal simulator library created.{X}")
+    elif simulator_libs:
+        final_libs.extend(simulator_libs)
+
+    cmd = ["xcodebuild", "-create-xcframework"]
+    print(f"{Y}{package} Creating XCFramework at {xcframework_path} from:{X}")
+    for lib_path in final_libs:
+        print(f"  -> Found library: {lib_path}")
+        cmd.extend(["-library", lib_path])
+    cmd.extend(["-output", xcframework_path])
+
+    try:
+        subprocess.run(cmd, check=True, text=True, capture_output=False)
+        print(f"{G}{check} XCFramework created successfully.{X}")
+    except subprocess.CalledProcessError as e:
+        print(f"{R}{cross} Failed to create XCFramework: {e}{X}")
+        return e.returncode
+    return 0
+
+def post_build_logic(env_, command_line_targets, target, arch):
+    if "assemble-ios" not in command_line_targets:
+        return
+
+    target_out_dir = target if target == "editor" else target.split('_', 1)[1]
+    output_base = f"build/ios/{target_out_dir}"
+    target_dir = f"demo/addons/godot-dojo/bin/ios/{target_out_dir}/godot-dojo.xcframework"
+
+    if os.path.exists(target_dir):
+        print(f"{Y}{broom} Deleting existing XCFramework for a clean build: {target_dir}{X}")
+        shutil.rmtree(target_dir)
+
+    libs_to_package = []
+    if arch == "universal":
+        print(f"{Y}Gathering all architectures for iOS XCFramework...{X}")
+        libs_to_package.append(f"{output_base}/godot-dojo.ios.{target}.arm64.dylib")
+        libs_to_package.append(f"{output_base}/godot-dojo.ios.{target}.simulator.x86_64.dylib")
+        libs_to_package.append(f"{output_base}/godot-dojo.ios.{target}.simulator.arm64.dylib")
+    else:
+        sim_suffix = ".simulator" if env_.get('ios_simulator', False) else ""
+        print(f"{Y}Gathering for iOS ({'Simulator' if sim_suffix else 'Device'} {arch}) only...{X}")
+        libs_to_package.append(f"{output_base}/godot-dojo.ios.{target}{sim_suffix}.{arch}.dylib")
+
+    if not libs_to_package:
+        print(f"{R}{cross} No valid iOS libraries to build. Aborting.{X}")
+        Exit(1)
+
+    package_action = env_.Action(lambda t, s, e: _create_xcframework_action(t, s, e), "Packaging iOS libraries into XCFramework...")
+    xcframework_package = env_.Command(target_dir, libs_to_package, package_action)
+    env_.Alias("assemble-ios", xcframework_package)
+    env_.Default(None) # Don't build the default host library when assembling
+
+config = {
+    "get_rust_target": get_rust_target,
+    "configure_compiler": configure_compiler,
+    "get_rust_lib_path": get_rust_lib_path,
+    "configure_linking": configure_linking,
+    "get_output_paths": get_output_paths,
+    "post_build_logic": post_build_logic,
+}
+Return("config")

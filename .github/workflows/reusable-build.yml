@@ -55,7 +55,7 @@ jobs:
         if: inputs.platform_id == 'android'
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r23c
+          ndk-version: r23b
           add-to-path: true
 
       - name: Configure Cargo for Android
@@ -117,7 +117,7 @@ jobs:
           # Set Android environment variables for SCons
           if [ "${{ inputs.platform_id }}" = "android" ]; then
             export ANDROID_NDK_ROOT=$ANDROID_NDK_HOME
-            SCONS_ANDROID_OPTS="android_ndk_path=$ANDROID_NDK_HOME"
+            SCONS_ANDROID_OPTS="android_ndk_root=$ANDROID_NDK_HOME"
           fi
 
           PLATFORM_ARG="platform=${{ inputs.platform_id }}"

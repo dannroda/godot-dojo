@@ -1,0 +1,34 @@
+Import("env")
+
+def get_rust_target(arch, env_):
+    targets = {"arm64": "aarch64-linux-android"}
+    return targets.get(arch)
+
+def configure_compiler(env_):
+    env_.Append(CXXFLAGS=['-fexceptions', '-std=c++17'])
+
+def get_rust_lib_path(rust_lib_target_dir, rust_build_mode):
+    return f"godot-dojo-core/target/{rust_lib_target_dir}/{rust_build_mode}/libgodot_dojo_core.a"
+
+def configure_linking(env_, rust_lib_path):
+    env_.Append(_LIBFLAGS=['-Wl,--start-group', rust_lib_path, '-Wl,--end-group'])
+
+def get_output_paths(env_, prefix, target, arch):
+    target_out_dir = target if target == "editor" else target.split('_', 1)[1]
+    output_dir = f"demo/addons/godot-dojo/bin/android/{target_out_dir}"
+    suffix = f".android.{target}.{arch}.so"
+    lib_name = f"{output_dir}/{prefix}godot-dojo{suffix}"
+    return output_dir, lib_name
+
+def post_build_logic(env_, command_line_targets, target, arch):
+    pass
+
+config = {
+    "get_rust_target": get_rust_target,
+    "configure_compiler": configure_compiler,
+    "get_rust_lib_path": get_rust_lib_path,
+    "configure_linking": configure_linking,
+    "get_output_paths": get_output_paths,
+    "post_build_logic": post_build_logic,
+}
+Return("config")

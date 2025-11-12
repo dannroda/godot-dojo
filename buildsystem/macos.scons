@@ -1,0 +1,47 @@
+import os
+Import("env")
+
+Y, X = '\033[1;33m', '\033[0m'
+
+def get_rust_target(arch, env_):
+    targets = {
+        "x86_64": "x86_64-apple-darwin",
+        "arm64": "aarch64-apple-darwin",
+        "universal": ["x86_64-apple-darwin", "aarch64-apple-darwin"],
+    }
+    return targets.get(arch)
+
+def configure_compiler(env_):
+    deployment_target = os.environ.get("MACOSX_DEPLOYMENT_TARGET", "14.0")
+    print(f"{Y}Setting macOS deployment target for C++ to {deployment_target}...{X}")
+    env_['ENV']['MACOSX_DEPLOYMENT_TARGET'] = deployment_target
+    env_.Append(CCFLAGS=[f'-mmacosx-version-min={deployment_target}'])
+    env_.Append(LINKFLAGS=[f'-mmacosx-version-min={deployment_target}'])
+    env_.Append(CXXFLAGS=['-fexceptions', '-std=c++17'])
+
+def get_rust_lib_path(rust_lib_target_dir, rust_build_mode):
+    return f"godot-dojo-core/target/{rust_lib_target_dir}/{rust_build_mode}/libgodot_dojo_core.a"
+
+def configure_linking(env_, rust_lib_path):
+    env_.Append(_LIBFLAGS=[rust_lib_path])
+    env_.Append(LINKFLAGS=['-framework', 'CoreFoundation'])
+
+def get_output_paths(env_, prefix, target, arch):
+    target_out_dir = target if target == "editor" else target.split('_', 1)[1]
+    output_dir = f"demo/addons/godot-dojo/bin/macos/{target_out_dir}"
+    suffix = f".macos.{target}.{arch}.dylib"
+    lib_name = f"{output_dir}/{prefix}godot-dojo{suffix}"
+    return output_dir, lib_name
+
+def post_build_logic(env_, command_line_targets, target, arch):
+    pass # No post-build logic for macOS
+
+config = {
+    "get_rust_target": get_rust_target,
+    "configure_compiler": configure_compiler,
+    "get_rust_lib_path": get_rust_lib_path,
+    "configure_linking": configure_linking,
+    "get_output_paths": get_output_paths,
+    "post_build_logic": post_build_logic,
+}
+Return("config")
