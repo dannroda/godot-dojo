@@ -220,7 +220,7 @@ jobs:
       - name: Set up Rust nightly
         uses: dtolnay/rust-toolchain@nightly
         with:
-          targets: ${{ matrix.rust_target }}
+          targets: ${{ matrix.platform_id == 'ios' && 'aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim' || matrix.rust_target }}
 
       - name: Cache Rust dependencies
         uses: actions/cache@v3
@@ -246,6 +246,7 @@ jobs:
           if [ "${{ matrix.platform_id }}" = "ios" ]; then
             cargo build --release --target aarch64-apple-ios
             cargo build --release --target x86_64-apple-ios
+            cargo build --release --target aarch64-apple-ios-sim
           else
             cargo build --release --target ${{ matrix.rust_target }}
           fi
