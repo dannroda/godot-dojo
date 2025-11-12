@@ -55,7 +55,7 @@ jobs:
         if: inputs.platform_id == 'android'
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r23b
+          ndk-version: r23c
           add-to-path: true
 
       - name: Configure Cargo for Android
@@ -67,12 +67,6 @@ jobs:
           echo "CXX_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang++" >> $GITHUB_ENV
           echo "AR_aarch64_linux_android=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
           echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang" >> $GITHUB_ENV
-
-      - name: Download core artifacts (target)
-        uses: actions/download-artifact@v4
-        with:
-          name: core-target-${{ inputs.platform_id }}-${{ inputs.arch }}${{ inputs.platform_id == 'ios' && '' || '-release' }}
-          path: godot-dojo-core/target
 
       - name: Set up Rust nightly
         uses: dtolnay/rust-toolchain@nightly
@@ -92,6 +86,12 @@ jobs:
 
       - name: Install scons
         run: pip install scons
+
+      - name: Download core artifacts (target)
+        uses: actions/download-artifact@v4
+        with:
+          name: core-target-${{ inputs.platform_id }}-${{ inputs.arch }}${{ inputs.platform_id == 'ios' && '' || '-release' }}
+          path: godot-dojo-core/target
 
       - name: Cache SCons and godot-cpp build artifacts
         uses: actions/cache@v3
