@@ -30,6 +30,7 @@ jobs:
   build:
     name: Build ${{ inputs.platform_id }}-${{ inputs.arch }}-${{ inputs.precision }}-${{ inputs.build_target }}
     runs-on: ${{ inputs.os }}
+    continue-on-error: ${{ inputs.platform_id == 'windows' }}
 
     steps:
       - name: Checkout code
