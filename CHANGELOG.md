@@ -1,5 +1,141 @@
 # Changelog
 
+## [v0.4] - 2025-11-12
+
+* ci: add missing ios rust toolchains ([3c9ba78](https://github.com/lonewolftechnology/godot-dojo/commit/3c9ba78f21360b3a5b7a86958a7b4b511947b14c))
+* ci: fix ios missing MACOSX_DEPLOYMENT_TARGET not set ([668b74d](https://github.com/lonewolftechnology/godot-dojo/commit/668b74d4c5941be473066c41659bec27a2a61a59))
+* ci: fix ios build ([b20bd3b](https://github.com/lonewolftechnology/godot-dojo/commit/b20bd3bc88b0214526733a9fdb3286f25dc3b488))
+* ci: add missing ios rust compilation ([7011b48](https://github.com/lonewolftechnology/godot-dojo/commit/7011b485b24f9b8b381617b684e4b8f61cc3c24c))
+* ci: maybe fix android build :shrug: ([fc1025e](https://github.com/lonewolftechnology/godot-dojo/commit/fc1025ec83d26b37794baae1096c12930f3f1e31))
+* ci: ignore `Merge branch` commits from changes list ([750b91d](https://github.com/lonewolftechnology/godot-dojo/commit/750b91dae41e78bb928a4b335791e9c74064557a))
+* ci: fix missing android-ar tool ([08885ae](https://github.com/lonewolftechnology/godot-dojo/commit/08885ae56353bfd73bf46682bc0d008e9a24f853))
+* Merge branch 'controller.c' into dev ([42d3123](https://github.com/lonewolftechnology/godot-dojo/commit/42d31230f21fa826d5baceacffcc71e780875945))
+* ci: ensure paths for android NDK ([9dabef3](https://github.com/lonewolftechnology/godot-dojo/commit/9dabef37fed88a537734ecfef7f22923c5ab44ed))
+* ci: fix missing Android NDK ([21b4e51](https://github.com/lonewolftechnology/godot-dojo/commit/21b4e516e482ce7cfe2dc05e928a897e4be95518))
+* scons: fix build path ([1ae1f47](https://github.com/lonewolftechnology/godot-dojo/commit/1ae1f47eef937ce91ac027c06e911ffadae1b93b))
+* ci: android and ios builds ([b06cc44](https://github.com/lonewolftechnology/godot-dojo/commit/b06cc44c3f2ca9be33ec67060ee775588deb3489))
+* scons: add ios build with required extra step/flag to generate xcframework ([4402b25](https://github.com/lonewolftechnology/godot-dojo/commit/4402b2599af8e93b5377c1214c4290a156ff28b5))
+* TestProject: minor change ([fbb8b39](https://github.com/lonewolftechnology/godot-dojo/commit/fbb8b3979ae99bdbc0cffa4e84efecd22d764115))
+* TestProject: temp priv-key to easier testing ([c65d5be](https://github.com/lonewolftechnology/godot-dojo/commit/c65d5beb250738e677e95dfb947d18ff28b68251))
+* docs: generate new files ([3e277c0](https://github.com/lonewolftechnology/godot-dojo/commit/3e277c0421f9d225e88b1ba7ad45c4f1d0ab7706))
+* TestProject: update to new slot ([4213966](https://github.com/lonewolftechnology/godot-dojo/commit/4213966768f09e349da74f9a0d8fe07400171a09))
+* StarterProject: update to use new slot and calls ([a48045e](https://github.com/lonewolftechnology/godot-dojo/commit/a48045e6c0d6c998997ed3c9c1c08d136a8cfaf8))
+* FieldElement: Simplify to string conversion to actually fix zeros padding ([c9bd86e](https://github.com/lonewolftechnology/godot-dojo/commit/c9bd86e5dbf570a1f25780cb7427d01f6f8a9ca1))
+* ios: wip working build ([d6a451c](https://github.com/lonewolftechnology/godot-dojo/commit/d6a451ced11ef87eeb8a605684e3d18efbbbeec3))
+* update test project ([5ca7e53](https://github.com/lonewolftechnology/godot-dojo/commit/5ca7e53b84f8c16ee28e736d3340c85bf9ce64e3))
+* Logger: allow disable from project settings ([799839e](https://github.com/lonewolftechnology/godot-dojo/commit/799839e09b2afe8a7a517417ea7bd145b72aae80))
+* ControllerHelper: fix execute_from_outside ([07a8a12](https://github.com/lonewolftechnology/godot-dojo/commit/07a8a127954a7c0205e1a75228b8bb72ae67c61f))
+* DojoController: added is_valid utility ([9ecac21](https://github.com/lonewolftechnology/godot-dojo/commit/9ecac21554e6c89ed10b4bef518d8b225bb47268))
+* .idea/rider ([1ed72ce](https://github.com/lonewolftechnology/godot-dojo/commit/1ed72cea831d12b6a0e031296ffeff52bcb2c237))
+* update doc_data_gen ([7c327aa](https://github.com/lonewolftechnology/godot-dojo/commit/7c327aab767e4b5fd2ac27f7f2e2b0d46a07b2eb))
+* demo: update testing scene ([12568fc](https://github.com/lonewolftechnology/godot-dojo/commit/12568fcc6897b5ec570db60f4b59da28f8ecb041))
+* demo: user info node ([a321b15](https://github.com/lonewolftechnology/godot-dojo/commit/a321b15edda568dd64c9e27843909f9d1abed5e9))
+* starter-project: http-pinger experiment, may be moved to demo/testing instead ([e03ae0c](https://github.com/lonewolftechnology/godot-dojo/commit/e03ae0c6ed6f7a58effca6f757692aea47f54e6b))
+* demo: added asset ([be4ccd5](https://github.com/lonewolftechnology/godot-dojo/commit/be4ccd5f90c2c838ceea2311ddffa6a6e3c8ab6b))
+* demo: update Connection to use session account ([5a470e1](https://github.com/lonewolftechnology/godot-dojo/commit/5a470e13df1645ca6c50dcd85743061c01a11148))
+* DojoSessionAccount: Return error message when method fetches and returns a String ([33c13f8](https://github.com/lonewolftechnology/godot-dojo/commit/33c13f86f86205689aa6d6db626f57cfe3bd2477))
+* Changed move calldata to arguments Added addons folder to gitignore Some cleanup ([f7fb671](https://github.com/lonewolftechnology/godot-dojo/commit/f7fb671207678baeb45874bfe9fc109fa7b1d76b))
+* Test project Readme ([d4315c3](https://github.com/lonewolftechnology/godot-dojo/commit/d4315c3b901c781795abc7004ffb64417a6cb57c))
+* New test project ([dc6ebf1](https://github.com/lonewolftechnology/godot-dojo/commit/dc6ebf125c6ebc66f786fae74c98aa4421092372))
+* update changelog ([5ef5a60](https://github.com/lonewolftechnology/godot-dojo/commit/5ef5a60aa7ed6a46e969fb605af360b2ec99e6de))
+* Warn that ControllerAccount is "deprecated" in favor of new wip controller (external/controller.c) ([524bc5c](https://github.com/lonewolftechnology/godot-dojo/commit/524bc5cca88e01fd1e0613a671ceae2b44b310a7))
+
+## [v0.3] - 2025-10-24
+
+* update docs ([7e76544](https://github.com/lonewolftechnology/godot-dojo/commit/7e7654470432146ab67f3a710ebfdf3b0f58e026))
+* DojoSessionAccount: added `id_valid` utility ([9074b82](https://github.com/lonewolftechnology/godot-dojo/commit/9074b82b348bc32728b836686eb409c2fb6ea460))
+* StarterProject: update to fully use gdscript ([a3c1171](https://github.com/lonewolftechnology/godot-dojo/commit/a3c11710cacdb2253428637c1307be6d383bacf4))
+* update SessionAccount testing ([9d0cdf3](https://github.com/lonewolftechnology/godot-dojo/commit/9d0cdf35322f95de405b8dbd099e96df1bbf4d05))
+* update docs ([d135d14](https://github.com/lonewolftechnology/godot-dojo/commit/d135d147d3874b2522e8300add691a37c6492062))
+* DojoSessionAccount: add get_info utility and cleanup ([1d494c5](https://github.com/lonewolftechnology/godot-dojo/commit/1d494c5e52842379b88c6815cc85586c70525e16))
+* DojoController: add get_info utility ([99cd9fa](https://github.com/lonewolftechnology/godot-dojo/commit/99cd9fadbc9aae2f5fbd52f6cf5d2caba668fea7))
+* ControllerHelper: fix calldata ([4143393](https://github.com/lonewolftechnology/godot-dojo/commit/4143393aca294ac489ec926b0a2c8a6c7f6920b2))
+* experimental test demo update ([0a15fa4](https://github.com/lonewolftechnology/godot-dojo/commit/0a15fa402a2a132f3f37d74a059e148114310c40))
+* ControllerHelper: better calldata handling ([8b9d7b0](https://github.com/lonewolftechnology/godot-dojo/commit/8b9d7b068b464340017525297cb16eed294a6be1))
+* controller.c: DojoSessionAccount and DojoController ([edfa11d](https://github.com/lonewolftechnology/godot-dojo/commit/edfa11d505cc611fba423f986920d866ed23d632))
+* scons: fix android rust compiling ([9635f37](https://github.com/lonewolftechnology/godot-dojo/commit/9635f3706042c8d53bdffae3a47d54c2aa3e5b6c))
+* scons: fix android lib naming and remove warning spam on macos build ([5634dc9](https://github.com/lonewolftechnology/godot-dojo/commit/5634dc94b2852738554c3806155bb1c1fabb1352))
+* ci: use rust target as env ([0b618ac](https://github.com/lonewolftechnology/godot-dojo/commit/0b618ac079a003ec642230ce493dd64501bf16da))
+* ci: split non-windows jobs ([be55972](https://github.com/lonewolftechnology/godot-dojo/commit/be559728f23ff50ba107551d25cc38471b92dbf5))
+* ci: maybe fix cache ([5a174ee](https://github.com/lonewolftechnology/godot-dojo/commit/5a174eeb304a40eaf2abb1c10c9919ea7b8de9fc))
+* ci: minor changes on scons ([0d6833d](https://github.com/lonewolftechnology/godot-dojo/commit/0d6833d80df5a1e1e4c65a6f0f2d1dfa508ad9ea))
+* ci: add missing build dependencies for windows gnu builds ([8b1e2fd](https://github.com/lonewolftechnology/godot-dojo/commit/8b1e2fdd3e83e6023d83da7022f853e456631615))
+* SessionAccount: fix generate_private_key on msvc builds ([98b89b5](https://github.com/lonewolftechnology/godot-dojo/commit/98b89b5ead8d5699738ae1d1fe037f7714ac74bb))
+* ci: fix mac build ([59e2256](https://github.com/lonewolftechnology/godot-dojo/commit/59e2256e79a63ea2149084f2e2c57e4fadb4be0b))
+* ci: add marker to ensure windows gnu build as fallback ([74d57f7](https://github.com/lonewolftechnology/godot-dojo/commit/74d57f7421cd18950bb60efcacff0d0368bcfc7d))
+* ci: update ([57419c2](https://github.com/lonewolftechnology/godot-dojo/commit/57419c26d71b5ae1f0bc8181431d1bb56fef97fc))
+* ci: fix ([7dbd30b](https://github.com/lonewolftechnology/godot-dojo/commit/7dbd30b74f6bc31e8b9f815b090a7e73a1c98f78))
+* ci: optimize and add windows-gnu build as a fallback ([b6b7248](https://github.com/lonewolftechnology/godot-dojo/commit/b6b72480c6ce467cfc52d0bb2daf0c3097125338))
+* crate: add polyfill patch directly to buidl.rs ([6e41bd1](https://github.com/lonewolftechnology/godot-dojo/commit/6e41bd1721efeaa72fb84ce8b7158facd341e5e1))
+* scons: fix windows gnu build ([fbf3420](https://github.com/lonewolftechnology/godot-dojo/commit/fbf342035f6afa0bc06723a16453038f3257637f))
+* patch: Polyfill for std::endian (C++20) when using C++17 or older. ([8208b64](https://github.com/lonewolftechnology/godot-dojo/commit/8208b647385a9ea8a9b943b4393357e6bd344302))
+* crate: ensure that build.rs is re-run everytime but can be skipped with env SKIP_BINDINGS_GENERATION ([8f0b3dc](https://github.com/lonewolftechnology/godot-dojo/commit/8f0b3dc623c458d894107031db3ee3e205e44e6c))
+* crate: add cdylib and rlib to crate-type ([2f4da2f](https://github.com/lonewolftechnology/godot-dojo/commit/2f4da2faab2cac21b3c906269b0f3a8610475421))
+* scons: ensure use of c++17 as Godot4.3 windows msvc builds crashes on c++20 ([c3d143b](https://github.com/lonewolftechnology/godot-dojo/commit/c3d143bffc40769fc8edcb4ec9b585e6aac00fa1))
+* crate: add SKIP_BINDINGS_GENERATION env variable to skip bindings generation ([b0c3a76](https://github.com/lonewolftechnology/godot-dojo/commit/b0c3a76c559f7925050e840e42d9a15e7c46e080))
+* ci: simplify workflow ([ca5e833](https://github.com/lonewolftechnology/godot-dojo/commit/ca5e833570bb9f98b59c31b4c64b1adbaa49bd47))
+* ci: minor changes ([393e37d](https://github.com/lonewolftechnology/godot-dojo/commit/393e37d6f27196c23c9956b4b35d2c709ab3f364))
+* ci: make workflow installation reusable ([b5b5c77](https://github.com/lonewolftechnology/godot-dojo/commit/b5b5c77a1589848af47f18f0ad015376b65b5b72))
+* ci: fix missing uniffi-bindgen-cpp on PATH ([669ec99](https://github.com/lonewolftechnology/godot-dojo/commit/669ec99f432b0d40ee46ec9f85048e68b59ed910))
+* ci: add env variable to force only use release build of rust crate ([eb47b0d](https://github.com/lonewolftechnology/godot-dojo/commit/eb47b0d61e54adca3f75cdb134a480fd056ac466))
+* ci: fix missing bindings not copiying ([2402348](https://github.com/lonewolftechnology/godot-dojo/commit/2402348234814f11f96639092e23da64e71bc399))
+* gdextension: update template to address macos x86 and arm64 builds ([dc29e96](https://github.com/lonewolftechnology/godot-dojo/commit/dc29e963dddeba73d1e13104c9f6e2e03057b612))
+* ci: remove debug build of rust crate and optimize workflow ([dcc6b24](https://github.com/lonewolftechnology/godot-dojo/commit/dcc6b24e56bc13642b908f64f8bea3f837cecf57))
+* ci: fix cannot overwrite ([06bb632](https://github.com/lonewolftechnology/godot-dojo/commit/06bb632fb49e0f3ddbf3658689f56d04497d427c))
+* ci: properly populate target cache ([cbdc04d](https://github.com/lonewolftechnology/godot-dojo/commit/cbdc04dfb19bf3ec4bc0d09feaf696a6bbeefdfa))
+* ci: fix artifacts paths ([b754f20](https://github.com/lonewolftechnology/godot-dojo/commit/b754f205dffb96e1a38f1445ebd7e3a6f340e7c2))
+* ci: possibly fix artifacts issue ([51f59bc](https://github.com/lonewolftechnology/godot-dojo/commit/51f59bcd478daf437bf975b1fd4b00345c811b9c))
+* ci: fix and optimize workflow ([3539dc9](https://github.com/lonewolftechnology/godot-dojo/commit/3539dc9e5f7f2292f81131837df86eae8128ead3))
+* ci: fix build crash when no changes ([6138e42](https://github.com/lonewolftechnology/godot-dojo/commit/6138e423fc22307a9d749b2ceb94d16fe4585687))
+* ci: efficiency experiment ([33db864](https://github.com/lonewolftechnology/godot-dojo/commit/33db86467c10926cb0c60b521903f118e5e6a423))
+* ci: remove commit author for cleaner release body ([bc84b38](https://github.com/lonewolftechnology/godot-dojo/commit/bc84b386b157bdd43c555f42e1d0f08bbf903b84))
+* ci: fix usernames on ci body ([5d2774b](https://github.com/lonewolftechnology/godot-dojo/commit/5d2774bb375092063e3905ec4bd1b086d0d1ced0))
+* ci: update release body ([577be54](https://github.com/lonewolftechnology/godot-dojo/commit/577be545713ab293ae83420fa32b0606df2c7253))
+* ci: add starter project download ([722e865](https://github.com/lonewolftechnology/godot-dojo/commit/722e86535b92351f25076a7adcc65b8f953aca39))
+* proper rename test project ([4621b74](https://github.com/lonewolftechnology/godot-dojo/commit/4621b74981f3f1b0b9c627dd282d70109a5c7808))
+* move test project ([4621c12](https://github.com/lonewolftechnology/godot-dojo/commit/4621c12bf46246dcd200c7fbc90b4c15ee718dd7))
+* ci: fix rust crate cache ([4af6b7b](https://github.com/lonewolftechnology/godot-dojo/commit/4af6b7b586180bbb005b3812850404d403c492e6))
+* Changed move calldata to arguments Added addons folder to gitignore Some cleanup ([a691e73](https://github.com/lonewolftechnology/godot-dojo/commit/a691e7354ca9fde80d788ff9f557b9b3f0d403f9))
+* Test project Readme ([8baed3d](https://github.com/lonewolftechnology/godot-dojo/commit/8baed3d0b637624303632e64b25a872a07b47026))
+* New test project ([0487b0a](https://github.com/lonewolftechnology/godot-dojo/commit/0487b0acf3876338f915dc86825262f1f5aaab14))
+* update changelog ([d39d722](https://github.com/lonewolftechnology/godot-dojo/commit/d39d72203b22e04cba037f671336fe619a9bc8f3))
+* experimental tcp server ([dca36a2](https://github.com/lonewolftechnology/godot-dojo/commit/dca36a2618962513c3fcddb29c26222f3e904154))
+* cleanup ([bfb75fa](https://github.com/lonewolftechnology/godot-dojo/commit/bfb75fa82af4194ee16e5fb2b601a7eb1063a252))
+* ci: update job matrix 4 ([1c62c21](https://github.com/lonewolftechnology/godot-dojo/commit/1c62c21b635bf26639e468920d55fce11afcee22))
+* ci: update job matrix 3 ([3d6e048](https://github.com/lonewolftechnology/godot-dojo/commit/3d6e048502232cbf741dd5d15428b7df560d9aea))
+* ci: update job matrix 2 ([4d6b2a0](https://github.com/lonewolftechnology/godot-dojo/commit/4d6b2a06847e67edcbec5e15cc4de3537b247876))
+* ci: update job matrix ([941bb4d](https://github.com/lonewolftechnology/godot-dojo/commit/941bb4d78edf21ce29f51c415476483823a375b7))
+* ci: fix ([58614f4](https://github.com/lonewolftechnology/godot-dojo/commit/58614f410948879f58b93968539bc4e52e8a4c82))
+* ci: fix missing protobuf and update rust workflow for macos ([822219d](https://github.com/lonewolftechnology/godot-dojo/commit/822219d021657ea49a933c5f4971aa68b48f0218))
+* ci: fix rust dependecies ([3385168](https://github.com/lonewolftechnology/godot-dojo/commit/33851683e07745bc8a4140676d32415ff1d1d905))
+* ci: update/fix ([83d06d7](https://github.com/lonewolftechnology/godot-dojo/commit/83d06d709fc814fce49b5d9492bfb538898c404c))
+* ci: test rust lib cached ([26948b3](https://github.com/lonewolftechnology/godot-dojo/commit/26948b3993158d2652fa69f3fba786e7ca4bb6b9))
+* experimental support for SessionAccount/Controller ([07b1e41](https://github.com/lonewolftechnology/godot-dojo/commit/07b1e41d0422f891fa7de6288579286257f6ffc8))
+* ci: update to match new single crate workflow ([5bf4f9a](https://github.com/lonewolftechnology/godot-dojo/commit/5bf4f9a87e20647c38ce26d418babacbb778b134))
+* crate: add crates to lib.rs to fix undefined symbol issues :shrug: ([7b1b556](https://github.com/lonewolftechnology/godot-dojo/commit/7b1b5567bd59d8636d4f2b148c2706dadbdd5751))
+* scons: fix target not being considered and removed android and web logic as this will be overhauled ([7fb0efd](https://github.com/lonewolftechnology/godot-dojo/commit/7fb0efdbf0c7a5519071a29440dca8bcf65ab70e))
+* crate: make sure output dir exists ([f51bc0c](https://github.com/lonewolftechnology/godot-dojo/commit/f51bc0cb984eedfd1d0ba161b926ac983c820dba))
+* buildsystem: update scons/cmake ([207b14f](https://github.com/lonewolftechnology/godot-dojo/commit/207b14fb2d424c6e1de0b75dc7a5f9ac8eb57298))
+* crate: show build prints for debugging ([f78cb4e](https://github.com/lonewolftechnology/godot-dojo/commit/f78cb4e12c951b30aa7be38a9e7009679a9f5e76))
+* removed submodules as now those are now part of godot-dojo-core crate ([0b37f26](https://github.com/lonewolftechnology/godot-dojo/commit/0b37f265a552a1bc71c4b0f0cb06ccc60c76ebc5))
+* update gitignore ([23ce1c0](https://github.com/lonewolftechnology/godot-dojo/commit/23ce1c0cea8f0f3fb4c7e261ede0a3e068d62f10))
+* update gitignore ([9fd344a](https://github.com/lonewolftechnology/godot-dojo/commit/9fd344a83868d5dd93c6a9d4e509226eec354813))
+* fully working unifying crate that generates the bindings ([b7b69f3](https://github.com/lonewolftechnology/godot-dojo/commit/b7b69f34c358ef0af3809f15eabfeb2cb0c71c5f))
+* feat: crate that merges dojo.c and controller.c into one staticlib ([48b15cc](https://github.com/lonewolftechnology/godot-dojo/commit/48b15ccadedcdc7fb86e3f51ae5637061508faad))
+* deprecate ControllerAccount + update submodules ([8b6138e](https://github.com/lonewolftechnology/godot-dojo/commit/8b6138e88896601156f0f037c18e9d60ed98cca3))
+* controller.c: DojoOwner ([95cc771](https://github.com/lonewolftechnology/godot-dojo/commit/95cc771462b070fa084e1fb134cd16036a4b0622))
+* update ci ([218fdaa](https://github.com/lonewolftechnology/godot-dojo/commit/218fdaab3aae2a0870f479b01805ab283316bbbb))
+* wip: controller.c `SessionAccount` `Controller` ([c7e867b](https://github.com/lonewolftechnology/godot-dojo/commit/c7e867b3ae252e35a12d92c888c57a070bd1d820))
+* fix ci ([53fec3c](https://github.com/lonewolftechnology/godot-dojo/commit/53fec3c416df1e745c1dc6729937362a9b80797a))
+* FieldElement: fix `to_string` padding ([04b25b6](https://github.com/lonewolftechnology/godot-dojo/commit/04b25b6b59dc434dd60f3ab2b37df763444f4bc1))
+* ci: fix release text overwrite when build is finished ([2bb77a8](https://github.com/lonewolftechnology/godot-dojo/commit/2bb77a82751bca2ce3bfcf52b3744d8095c47f18))
+* BigInt: utility tools - get_width() - get_int64() - get_uint64() for U128, U256 ([bea833c](https://github.com/lonewolftechnology/godot-dojo/commit/bea833c3bff9ad39dc2a2ce4e875a54a9d430ec9))
+* fix: types mismatch ([08ea150](https://github.com/lonewolftechnology/godot-dojo/commit/08ea15050e0d54e76f93e13a8366ef043ac6f55a))
+* add experimental namespace for controller.c ([4d04f7c](https://github.com/lonewolftechnology/godot-dojo/commit/4d04f7cd447026648e2d9c57c86359250ace576a))
+* fix Account.tscn naming ([e8bd2b3](https://github.com/lonewolftechnology/godot-dojo/commit/e8bd2b37544e5fe31022d5caace4dcbdee4240d2))
+* Append `Dojo` to all options to avoid class overlap with `controller.c` ([9deb722](https://github.com/lonewolftechnology/godot-dojo/commit/9deb7220b724ea2b2476e0a10d8ea11f19455e82))
+* Build: add controller.c to buildsystem ([86f0d62](https://github.com/lonewolftechnology/godot-dojo/commit/86f0d62b9f3c5be5ec68a3e0fcf005daaf82e030))
+
 ## [v0.2.5.1] - 2025-10-17
 
 * Update Docs ([791de5f](https://github.com/lonewolftechnology/godot-dojo/commit/791de5f901f0128f7b488b37ab1bbd074ebf222a))
@@ -489,27 +625,12 @@
 * update to 1.6.0.alpha.0 ([e83c77d](https://github.com/lonewolftechnology/godot-dojo/commit/e83c77da92db6685bf8f99be03cb2ad61769af45))
 * update dojo.c 1.6.0.alpha.0 ([e72810a](https://github.com/lonewolftechnology/godot-dojo/commit/e72810a756a4cadd57204db663100e6d681de787))
 * Merge branch '1.6.0_wip' into dev ([7751792](https://github.com/lonewolftechnology/godot-dojo/commit/7751792ba10d0feef67561eebbfbe6086d03927d))
-
-## [v0.1.7-alpha-dev] - 2025-07-08
-
 * :shrug: workflows deserve to look good ([4e215ce](https://github.com/lonewolftechnology/godot-dojo/commit/4e215cec5890f8a6e95025c4c5e3de69e93bc676))
-
-## [v0.1.6-alpha-dev] - 2025-07-08
-
 * workflow matrix refactor ([a4338ab](https://github.com/lonewolftechnology/godot-dojo/commit/a4338abbf41c316349ff91e5a42481a05cc5edfc))
-
-## [v0.1.5-alpha-dev] - 2025-07-08
-
 * workflow testing ([6c751f2](https://github.com/lonewolftechnology/godot-dojo/commit/6c751f2d2bbb0b5425dea75630c94502e95b8631))
-
-## [v0.1.4-alpha-dev] - 2025-07-08
-
 * minor fixes + combine github actions ([02c7899](https://github.com/lonewolftechnology/godot-dojo/commit/02c7899d8db3b8b8f3f5e112386e3b36b8ba498e))
 * update changelog ([b1f1019](https://github.com/lonewolftechnology/godot-dojo/commit/b1f1019b7eae02e5ade070e9123f5e455f75e6ea))
 * add double precision ([66430aa](https://github.com/lonewolftechnology/godot-dojo/commit/66430aad04ae10fc2388f69fe79f569993e98f7c))
-
-## [v0.1.3-alpha-dev] - 2025-07-08
-
 * update changelog ([5e788e8](https://github.com/lonewolftechnology/godot-dojo/commit/5e788e849101cdc32dbef52803ca0e8867ea5ff5))
 * add double precision ([2712957](https://github.com/lonewolftechnology/godot-dojo/commit/271295751017ad12fa84429a54afe608b35e5a67))
 * update dojo.c to latest dev 1.6.0 ([a43a9be](https://github.com/lonewolftechnology/godot-dojo/commit/a43a9beaf2df8b6b2f8a444618a043784336f07f))
@@ -526,22 +647,10 @@
 
 * remove act build ([8ba400c](https://github.com/lonewolftechnology/godot-dojo/commit/8ba400c0f58f8c648adc324b0f13e8a616bac89c))
 
-## [v0.1.2-alpha-dev] - 2025-07-05
-
-* final changes to ci ([8af6e1c](https://github.com/lonewolftechnology/godot-dojo/commit/8af6e1c79b7b38c184a39cc7a8b3e11fdbfe2b2c))
-
-## [v0.1.1-alpha-dev] - 2025-07-05
-
-* remove unnecessary cp on ci ([311a9dd](https://github.com/lonewolftechnology/godot-dojo/commit/311a9dda8f70a32e1b987caa951b05578352e77d))
-
-## [v0.1-alpha-dev] - 2025-07-05
-
-* remove unnecessary cp on ci ([311a9dd](https://github.com/lonewolftechnology/godot-dojo/commit/311a9dda8f70a32e1b987caa951b05578352e77d))
-
 ## [v0.0.1-dev] - 2025-07-05
 
 * final changes to ci ([8af6e1c](https://github.com/lonewolftechnology/godot-dojo/commit/8af6e1c79b7b38c184a39cc7a8b3e11fdbfe2b2c))
-
+* remove unnecessary cp on ci ([311a9dd](https://github.com/lonewolftechnology/godot-dojo/commit/311a9dda8f70a32e1b987caa951b05578352e77d))
 * possibly finally fix ci ([2fe21e1](https://github.com/lonewolftechnology/godot-dojo/commit/2fe21e121fd845ca16f9b21c358205ac76ea3e36))
 * add missing protoc dependency to windows and macos ci ([294a8c2](https://github.com/lonewolftechnology/godot-dojo/commit/294a8c2c44bc02d1e4c6c59cbb18e6bc43c8d187))
 * update scons ([0346348](https://github.com/lonewolftechnology/godot-dojo/commit/0346348feed7388c73921d913887cfcebdab61d7))
@@ -587,7 +696,7 @@
 * Merge remote-tracking branch 'origin/demo_refactor' into FullRefactor ([49b17e9](https://github.com/lonewolftechnology/godot-dojo/commit/49b17e95e717ce1190ef4413830fdb6202e7d9a2))
 * username and address ([2b472a9](https://github.com/lonewolftechnology/godot-dojo/commit/2b472a917b321e65701975f481f88d9c1f2b8e78))
 * Merge branch 'demo_refactor' into FullRefactor ([8e25372](https://github.com/lonewolftechnology/godot-dojo/commit/8e2537276c05ae73b1e562559451d9537db303b3))
-* (demo_refactor) New autoload Connection Demo game ([44afd04](https://github.com/lonewolftechnology/godot-dojo/commit/44afd043d2c3e62cf1cce19498ad521666819125))
+* New autoload Connection Demo game ([44afd04](https://github.com/lonewolftechnology/godot-dojo/commit/44afd043d2c3e62cf1cce19498ad521666819125))
 * minor changes ([67c98e4](https://github.com/lonewolftechnology/godot-dojo/commit/67c98e472cf812c95a35759baa2de8dcb5494107))
 * fix move call ([6e84e6c](https://github.com/lonewolftechnology/godot-dojo/commit/6e84e6c51234b232f27c02d0f3f2762f3a5951f1))
 * update demo + fix missing data names ([0a283d1](https://github.com/lonewolftechnology/godot-dojo/commit/0a283d189338507c71b733f38fe0a9ab6f0da8c7))
