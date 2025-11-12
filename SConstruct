@@ -455,10 +455,9 @@ suffix_map = {
     "macos": f".macos.{target}.{arch}.dylib",
     "ios": f".ios.{target}.{arch}.dylib" if not env['ios_simulator'] else f".ios.{target}.simulator.{arch}.dylib" ,
 }
-
 target_out_dir = target
-if not target == "editor":
-    target_out_dir = target.spit('_', 1)[1]  # "debug" or "release"
+if not target_out_dir == "editor":
+    target_out_dir = target.split('_', 1)[1]  # "debug" or "release"
 
 if platform == "ios":
     # Para iOS, los binarios se construyen en un directorio intermedio `build/`
