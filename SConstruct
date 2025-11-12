@@ -455,8 +455,8 @@ suffix_map = {
     "macos": f".macos.{target}.{arch}.dylib",
     "ios": f".ios.{target}.{arch}.dylib" if not env['ios_simulator'] else f".ios.{target}.simulator.{arch}.dylib" ,
 }
-
-target_out_dir = target.split('_', 1)[1]  # "debug" or "release"
+if not target == "editor":
+    target_out_dir = target.spit('_', 1)[1]  # "debug" or "release"
 
 if platform == "ios":
     # Para iOS, los binarios se construyen en un directorio intermedio `build/`
@@ -555,9 +555,6 @@ def create_xcframework_action(target, source, env):
 # Define an alias to build the XCFramework.
 # This only runs if `scons platform=ios xcframework` is invoked.
 if platform == "ios":
-    # We need to know the target ('template_debug' or 'template_release')
-    target_out_dir = target.split('_', 1)[1]  # "debug" or "release"
-
     # Only define the 'assemble-ios' alias and its dependencies if it's actually requested.
     if "assemble-ios" in COMMAND_LINE_TARGETS:
         output_base = f"build/ios/{target_out_dir}"
